@@ -40,8 +40,3 @@ custom_input = ''
 #=============================================================================
 import src.model_creator as mc
 mc.build_model_file(name, equations, labelled, data_mode, custom_input)
-
-
-# 'itc': Single Set of Identical Sites ITC binding data. Currently expects the 
-#     system energy, G, NOT delta G. Zero is defined as zero bound complex. Make
-#     sure the labeled component is the component in the cell.

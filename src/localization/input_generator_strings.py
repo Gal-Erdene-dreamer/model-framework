@@ -6,14 +6,13 @@ Created on Fri May 21 11:11:58 2021
 """
 
 header = """# Config file for use with the framework for equilibrium models.
-# This file was made using the input_generator. 
+# This file was made using the config_generator. 
 
 # This config file is used to set the total concentrations for species other
 # than the titrate. Values under the DEFAULT section will be set for all 
-# conditions. Values for individual conditions can be set by creating sections
-# with the specific conditions name. The name of a conditions is equal to the 
-# corresponding input file name without extention (case sensitive).
-# e.g. the input file 'AO_30_uM.csv' will correspond to state 'AO_30_uM' 
+# experiments. Values for individual experiments can be set by creating 
+# sections with the specific experiment name (header name in the excel file,
+# case sensitive).
 
 # Section names are placed in [brackets]
 # variables are defines as:
