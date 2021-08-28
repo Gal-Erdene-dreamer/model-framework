@@ -299,9 +299,10 @@ def _anti_blackbox(equations, species, recipes, constants, mass_balance,
     print(*species, sep=', ')
     print()
     print('From these species, the following cannot be "created" '
-          'in the current model definition. They determine the solution of '
-          'the system and the concentrations of the other species. '
-          'They will be labeled as "independent".')
+          'in the current model definition (the components of the system). ' 
+          'They determine the solution of the system and the concentrations ' 
+          'of the other species. They will be labeled as "independent" in the '
+          'model file.')
     print(*equations.keys(), sep=', ')
     print()
     print('The concentrations of the other species in equilibrium can be ' 
@@ -325,7 +326,7 @@ def _anti_blackbox(equations, species, recipes, constants, mass_balance,
         recipe = str(recipe).replace('- '+ independent_total, '')
         print(f'{independent_total} = {recipe}')
     print()
-    print('Finally, we re-write these equations to equal zero, and divide '
+    print('Finally, we rewrite these equations to equal zero, and divide '
           'by the total concentrations on both sides in order to reach a '
           'solution faster during solving. This form can also be found in the '
           'model file:')
