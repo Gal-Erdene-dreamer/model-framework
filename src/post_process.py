@@ -620,7 +620,7 @@ def plot_concentrations(system, *, plot_species='all',
                 label=specie)
     
     # Modify graph looks
-    ax.set_xscale('log') 
+    ax.set_xscale('log')
     ax.set_title("Concentration species vs titrate")
     ax.set_xlabel(f'{system.titrate} (M)')
     ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), shadow=True)

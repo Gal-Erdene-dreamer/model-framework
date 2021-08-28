@@ -32,13 +32,22 @@ def build_model_file(name, equations, labeled, data_mode, custom_input):
     Data_mode: {'anisotropy', 'custom'}
         The manner in which state is related to the system data.
         Possible modes:
-            'anisotropy': Default anisotropy measurement, unbound labeled 
-            specie gives low anisotropy, all other combinations give the same
-            high signal.
+            'anisotropy': Default anisotropy measurement, unbound labelled 
+            specie gives min anisotropy, all other combinations containing
+            labelled result in max signal. Can also be used for other
+            techniques where unbound results in the low signal and bound
+            results in the high signal while the individual contributions
+            can be summed.
+            'inverse_anisotropy': Equal to the anisotropy mode but inversed.
+            Unbound results in high signal, while all other complexes
+            containing the specie results in low signal.
+            'itc': ITC measurement of a single complex forming. IMPORTANT:
+            this mode expects total heat as measurement value. NOT the delta
+            heat. Each measurement point should be the total heat produced
+            up to that point.
             'custom': Will try to parse the value in custom_input into
-            a data equation. If no input is given, will create the 
-            skeleton in the model file but require the user to enter the 
-            final version. 
+            a data equation. If no input is given, will show the determined
+            model equations but raise an exception afterwards.
     Custom_input: String
         When the 'custom' data_mode is chosen, this string will be evaluated
         in order to define the custom data function.
@@ -66,7 +75,7 @@ def build_model_file(name, equations, labeled, data_mode, custom_input):
     update_state_text = _update_state_text(
         equations, species, recipes, constants)
     data_function_text = _data_function_text(
-        data_mode, species, labeled, custom_input)
+        data_mode, species, labeled, custom_input, recipes)
     
     os.makedirs('output/', exist_ok=True)
     with open(f'output/{name}.py', 'x', encoding="utf-8") as f:
@@ -295,9 +304,9 @@ def _anti_blackbox(equations, species, recipes, constants, mass_balance,
           'They will be labeled as "independent".')
     print(*equations.keys(), sep=', ')
     print()
-    print('The concentrations of the other species in equilibirum can be ' 
+    print('The concentrations of the other species in equilibrium can be ' 
           'determined based on the concentrations of the independent ' 
-          'species and the equilibirium constant, using the following '
+          'species and the equilibrium constant, using the following '
           '"recipes". They will be labeled as "dependent":')
     for dependent, recipe in recipes.items():
         print(f'{dependent}: {recipe}')
@@ -661,7 +670,7 @@ def _update_state_text(equations, species, recipes, constants):
     return function_string    
 
 
-def _data_function_text(mode, species, labeled, custom_input):
+def _data_function_text(mode, species, labeled, custom_input, recipes):
     """
     Helper function to create the data function for the model creator, 
     based on a given mode.
@@ -678,22 +687,41 @@ def _data_function_text(mode, species, labeled, custom_input):
     Custom_input: String
         Used with mode = custom, the processed version of the custom_input by
         _proces_custom_input.
+    Recipes: Dictionary
+        Recipes result from text_to_mass_balance function
     """
+    components = [specie for specie in species if specie not in recipes.keys()]
+    contains_labeled = [specie for specie, recipe in recipes.items()
+                        if labeled in str(recipe)]
     function_string = strings['data_base']
     mode = mode.lower()
-    if mode == 'anisotropy':
-        label_vars = {var for var in species if labeled in str(var)}
+    
+    if mode == 'anisotropy' or mode == 'inverse_anisotropy':
         total_labeled = Symbol(f'{labeled}_tot')
-        labeled = Symbol(labeled) 
+        labeled = Symbol(labeled)
+        if labeled not in components:
+            raise ValueError('Default (inverse) anisotropy data-mode expects '
+                    'one of the system components as labeled specie. Please ' 
+                    'use custom data mode if this is not the the case.')
         
-        bound_vars = label_vars.difference({labeled})
         fraction_upper = []
-        for var in bound_vars:
-            count = str(var).count(str(labeled))
-            fraction_upper += count * [var]
-        bound_part = Symbol('data_max') * sum(fraction_upper) / total_labeled    
-
-        unbound_part = Symbol('data_min') * labeled / total_labeled 
+        for specie in contains_labeled:
+            recipe = recipes[specie]
+            count = degree(recipe, labeled)
+            if count != 1:
+                raise ValueError('Labeled component contained multiple times '
+                    f'in complex: {specie}. Anisotropy contribution for each '
+                    'of the different complex sizes is poorly defined. '
+                    'Please use a custom data function.')
+            fraction_upper.append(specie)
+        
+        if mode == 'anisotropy':
+            bound_part = Symbol('data_max') * sum(fraction_upper) / total_labeled    
+            unbound_part = Symbol('data_min') * labeled / total_labeled 
+        else:
+            bound_part = Symbol('data_min') * sum(fraction_upper) / total_labeled    
+            unbound_part = Symbol('data_max') * labeled / total_labeled 
+            
         complete = unbound_part + bound_part
         function_string +='    # Readability\n'
         for specie in sorted(complete.atoms(Symbol), key=str):
@@ -701,6 +729,35 @@ def _data_function_text(mode, species, labeled, custom_input):
             function_string += f'    {specie} = state.{specie}\n'
         function_string += '\n'
         function_string +=f'    return {complete}\n\n\n'  
+        
+    elif mode == 'itc':
+        total_labeled = Symbol(f'{labeled}_tot')
+        labeled = Symbol(labeled)
+        if labeled not in components:
+            raise ValueError('Default ITC data-mode expects one of '
+                    'the system components as labeled specie. Please use '
+                    'custom data mode if this is not the the case.')
+        
+        if len(contains_labeled) != 1:
+            raise ValueError('Did not find one (and only one) complex with '
+                        'labeled component. Default ITC is only defined for '
+                        'a single binding event. Please use a custom '
+                        'function if this is not the case.')            
+            
+        # Only a single labeled construct
+        fraction_bound = contains_labeled[0] / total_labeled
+
+        function_string +='    # Readability\n'
+        for component in sorted(fraction_bound.atoms(Symbol), key=str):
+            component = str(component)
+            function_string += f'    {component} = state.{component}\n' 
+        for limit in ['data_min', 'data_max']:
+            function_string += f'    {limit} = state.{limit}\n'
+
+        function_string += ("\n    q_constant = data_min if abs(data_min) > " 
+                            "abs(data_max) else data_max\n")
+        function_string += (f'    return {fraction_bound} * q_constant')
+        
     elif mode == 'custom':
         if custom_input == '':
             function_string += ('    raise NotImplementedError("Model creator '
@@ -709,8 +766,7 @@ def _data_function_text(mode, species, labeled, custom_input):
         else:
             function_string += '    # Readability\n'
             for atom in custom_input.atoms(Symbol):
-                function_string += f'    {atom} = state.{atom}\n'
-            function_string += '\n'
+                function_string += f'    {atom} = state.{atom}\n\n'
             function_string += '    return ' + str(custom_input)
     else:
         raise ValueError(

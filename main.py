@@ -44,8 +44,7 @@ same format as the fit_parameters.
 """
 known_parameters = {}
 
-
-# Which analyses to perform after fittin any unknown parameters.
+# Which analyses to perform after fitting any unknown parameters.
 analysis = ['plot_model']
 
 """
