@@ -127,6 +127,8 @@ def run(*, model, input_folder, titrate, setup_type, fit_parameters,
                     **kwargs)
     
     for system in systems:
+        # Check that all parameters and concentrations are defined
+        system.system_defined_check(fit_parameters)
         if len(fit_parameters) > 0:
             print('Solving system...')
             system.solve(fit_parameters = fit_parameters)

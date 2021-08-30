@@ -231,7 +231,7 @@ class System:
                             f'detected for: {specie} in {condition.name}')
                 # Model cant handle zero, make very small instead
                 elif value == 0:
-                    condition.state.variables()[specie] = 1E-20
+                    condition.state.set_value(specie, 1E-20)
                     zero_flag = True        
         if zero_flag:
             print('\nNOTE: Zero concentration detected for one of the '
