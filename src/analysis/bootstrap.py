@@ -312,7 +312,7 @@ def histogram(data, lower=None, upper=None):
     ax.tick_params(axis='y', labelsize=12)
     ax.set_xlabel('Parameter value', fontsize=12)
     ax.set_ylabel('Frequency', fontsize=12)
-    ax.set_title(f'Boostrap results: {data.name}', fontsize=12)
+    ax.set_title(f'Bootstrap results: {data.name}', fontsize=12)
     time = datetime.now().strftime("%Y-%m-%d %H%M%S")
     fig.savefig(f'output\{time}-{data.name}-bootstrap-histogram.svg', 
                 format='svg', dpi=1200)
