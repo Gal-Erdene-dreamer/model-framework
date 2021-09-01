@@ -628,7 +628,7 @@ def plot_concentrations(system, *, plot_species='all',
     ax.yaxis.offsetText.set_visible(False)
     multiplier = ax.yaxis.get_offset_text().get_text()
     unit = _axis_unit_label(multiplier)
-    ax.set_ylabel(f'Specie (x {unit}M)')
+    ax.set_ylabel(f'Species (x {unit}M)')
     plt.tight_layout()
     
     # Save the figure
