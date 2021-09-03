@@ -207,7 +207,7 @@ class System:
             if (parameter not in fit_parameters and 
                 parameter not in self.known_parameters.keys()):
                 raise ValueError(
-                    f'Parameter: {parameter} is in neither fitted_parameters '
+                    f'Parameter: {parameter} is in neither fit_parameters '
                     'nor known_parameters (case sensitive).')
         
         # Check that all _tot concentrations are set.
