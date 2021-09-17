@@ -596,11 +596,11 @@ def plot_concentrations(system, *, plot_species='all',
         result = system.conditions[0].concentrations_at(titrate, guess=guess)
         for specie, value in sorted(result.independent.items()):
             if (specie in plot_species or plot_species == 'all' or 
-                plot_species == 'independent'):
+                plot_species == 'components'):
                 specie_concentrations.setdefault(specie, []).append(value) 
         for specie, value in sorted(result.dependent.items()):
             if (specie in plot_species or plot_species == 'all' or 
-                plot_species == 'dependent'):
+                plot_species == 'complexes'):
                 specie_concentrations.setdefault(specie, []).append(value) 
         guess = result.solution
     
