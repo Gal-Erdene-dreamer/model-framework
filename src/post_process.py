@@ -532,8 +532,10 @@ def plot_concentrations(system, *, plot_species='all',
     
     It is possible to select which species with the plot_species argument:
         'all': plots all species except for free titrate. 
-        'independent': plot all species marked in the model as 'independent'
-        'dependent': plot all species marked in the model as 'dependent'
+        'components': plot all species marked in the model as 'independent',
+            the components of the system.
+        'complexes': plot all species marked in the model as 'dependent',
+            the complexes formed from the components.
         ['R', 'S', ...]: a list of species to plot. Species need to be
             defined in the model and lookup is case-sensitive.
 
@@ -541,8 +543,8 @@ def plot_concentrations(system, *, plot_species='all',
     ----------
     system : System object
         The system to analyse
-    plot_species : {'all', 'independent', 'dependent'} or 
-                        list of string, optional
+    plot_species : {'all', 'components', 'complexes'} or 
+                        list of strings, optional
         Which species to plot, see above for options. The default is 'all'.
     concentrations_start : float, optional
         The lowest titrate concentration to plot. The default is equal to the
