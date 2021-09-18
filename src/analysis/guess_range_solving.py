@@ -46,7 +46,7 @@ def range_solver(system, *, range_fit_parameters=None, range_n = 10,
         raise ValueError('range_fit_parameters additional argument '
                 'should be a dictionary of tuples where each key is a '
                 'fit parameter. \ne.g. for fit_parameters Kd and Alpha:\n'
-                'range_fit_parameters: {Kd: (1E-5, 1E-3), Alpha: (10, 1000)}')
+                '"range_fit_parameters": {"Kd": (1E-5, 1E-3), "Alpha": (10, 1000)}')
     
     
     # Get the lower, upper and diff of each parameter
