@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+""""""
 """
 Created on Wed Dec 16 21:08:24 2020
 
@@ -17,6 +18,8 @@ from src.analysis.outliers import doornbos_outlier, UndeterminedError
 from src.analysis.bootstrap import bootstrap
 from src.analysis.helpers import _axis_unit_label, timer
 
+
+from functools import wraps
 
 """
 The first and only positional argument supplied is system, the system object
@@ -48,6 +51,7 @@ def write_to_file(func):
     func return written to 'output/*time* *function_name*.csv'
     
     """
+    @wraps(func)
     def wrapper_to_file(*args, write_output = True, **kwargs):
         kwargs['write_output'] = write_output
         result = func(*args, **kwargs)
@@ -150,14 +154,16 @@ def plot_model(system, normalise = False, model_plot_min = None,
     model_plot_max : float
         The maximum titrate concentration to plot
         
-    Modifies
+    Warnings
     --------
-    system.state
+    Modifies system.state
     
     Returns
     -------
+    Matplotlib plot
+        The plotted data
     pandas.dataframe
-        Dataframe containing the numbers plotted.
+        Dataframe containing the raw numbers plotted.
 
     """    
     if system.solution is not None:
@@ -211,6 +217,9 @@ def residuals(system, **kwargs):
     
     Returns
     -------
+    Matplotlib plot
+        Scatterplot displaying the residuals between model prediction and
+        measured values.
     pandas.dataframe
         Dataframe containing the numbers plotted.
     """
@@ -246,10 +255,8 @@ def landscape(system, *, landscape_parameters = None, **kwargs):
     """
     Landscape post process selection tool. Will call the appropriate landscape
     function based on the number of landscape_parameters.
-    
     If no landscape_parameters are given, the landscape function will try
     to use the fit_parameters instead. 
-    
     If more than two parameters are given only the first two will be plotted.
 
     Parameters
@@ -269,14 +276,16 @@ def landscape(system, *, landscape_parameters = None, **kwargs):
         If len(landscape_parameters) < 1 or
         if no landscape_parameters are given and there are no fit_parameters
         
-    Modifies
+    Warnings
     --------
-    System.condition.state objects concentration
+    Modifies System.condition.state objects concentration
         
-
     Returns
     -------
-    Appropriate landscape plot for the number of parameters.
+    Matplotlib plot
+        Appropriate landscape plot for the number of parameters.
+    Pandas dataframe
+        Contains the raw values used in the plot
 
     """
     if landscape_parameters is None:
@@ -313,7 +322,8 @@ def landscape_1d(system, *, landscape_parameters, landscape_1_range = None,
 
     Returns
     -------
-    Line plot of the MSE values for the range of parameter values.
+    Matplotlib plot
+        Line plot of the MSE values for the range of parameter values.
     
     pandas.dataframe
         Dataframe containing the numbers plotted.
@@ -377,8 +387,11 @@ def landscape_2d(system, *, landscape_parameters, landscape_1_range=None,
     
     Returns
     -------
-    2D plot showing the MSE values for the range of parameter values as
-    contour plot.
+    Matplotlib plot
+        2D plot showing the MSE values for the range of parameter values as
+        contour plot.
+    pandas.dataframe
+        Dataframe containing the raw numbers plotted.
     
     Raises
     ------
@@ -460,8 +473,9 @@ def outlier(system, *, write_output = True, skip_warnings = False, **kwargs):
 
     Returns
     -------
-    Prints any outliers found to the system.out or to file depending
-    on parameters.
+    None
+        Prints any outliers found to the system.out or to file depending
+        on parameters.
 
     """
     # Set up
@@ -531,20 +545,19 @@ def plot_concentrations(system, *, plot_species='all',
     output file.
     
     It is possible to select which species with the plot_species argument:
-        'all': plots all species except for free titrate. 
-        'components': plot all species marked in the model as 'independent',
-            the components of the system.
-        'complexes': plot all species marked in the model as 'dependent',
-            the complexes formed from the components.
-        ['R', 'S', ...]: a list of species to plot. Species need to be
-            defined in the model and lookup is case-sensitive.
+    -'all': plots all species except for free titrate. 
+    -'components': plot all species marked in the model as 'independent', 
+    the components of the system.
+    -'complexes': plot all species marked in the model as 'dependent',
+    the complexes formed from the components.
+    -['R', 'S', ...]: a list of species to plot. Species need to be
+    defined in the model and lookup is case-sensitive.
 
     Parameters
     ----------
     system : System object
         The system to analyse
-    plot_species : {'all', 'components', 'complexes'} or 
-                        list of strings, optional
+    plot_species : {'all', 'components', 'complexes'} or list of strings, optional
         Which species to plot, see above for options. The default is 'all'.
     concentrations_start : float, optional
         The lowest titrate concentration to plot. The default is equal to the
@@ -557,11 +570,16 @@ def plot_concentrations(system, *, plot_species='all',
     ------
     ValueError
         If the system has more than one condition associated.
+    
+    Warnings
+    --------
+    Modifies system.state
 
     Returns
     -------
-    line plot showing the concentrations of the selected species as a 
-    function of the total titrate concentration present.
+    matplotlib plot
+        line plot showing the concentrations of the selected species as a 
+        function of the total titrate concentration present.
 
     pandas.dataframe
         Dataframe containing the numbers plotted.
@@ -648,7 +666,7 @@ def confidence_interval(system, *, confidence_method='bootstrap',
                         confidence_repeats=10, bias_acceleration = True,
                         **kwargs):
     """
-    Determines a confidence interval for the meters based on the
+    Determines a confidence interval for the parameters based on the
     given approach. Currently only the bootstrap method is supported.
     
     The bootstrap method is based on random draw, so a large number of
@@ -664,7 +682,11 @@ def confidence_interval(system, *, confidence_method='bootstrap',
     confidence_repeats : integer, optional
         The number of bootstrap sets to generate. A 1000 samples will
         result in reasonable predictions in most cases. The default is 10
-        because this function can take a long time to execute.
+        to give an indication of the total duration required.
+    
+    Warnings
+    --------
+    Modifies system.state
 
     Returns
     -------
@@ -724,11 +746,15 @@ def parameter_sensitivity(system, *, sensitivity_perturbation = 0.5,
     sensitivity_parameters : list of strings
         List of parameters to test for sensitivity. By default the
         fit_parameters are used as sensitivity_parameters
-    m_function : python function, optional
+    sensitivity_m_function : python function, optional
         The function to use to determine the M value, see above. By default
         the system.error_function is used. The function should take only a
         single argument 'system'.
 
+    Warnings
+    --------
+    Modifies system.state
+    
     Raises
     ------
     ValueError
@@ -737,6 +763,8 @@ def parameter_sensitivity(system, *, sensitivity_perturbation = 0.5,
 
     Returns
     -------
+    Matplot plot
+        Barplot showing the sensitivities of the different parameters.
     pandas Dataframe
         The absolute values used to plot the data.
 
@@ -836,10 +864,10 @@ def range_solver(system, *, range_fit_parameters=None, range_n = 10,
         Whether to use a log based scale instead of a linear scale to create
         the strata. The default is True.
 
-    Modifies
+    Warnings
     --------
-    system parameters for the keys in range_fit_parameters
-    system.solution
+    Modifies system parameters for the keys in range_fit_parameters
+    Modifies system.solution
 
     Returns
     -------
