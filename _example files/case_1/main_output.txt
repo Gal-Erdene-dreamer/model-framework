@@ -1,0 +1,9 @@
+Solving system...
+`ftol` termination condition is satisfied.
+Function evaluations 6, initial cost 6.0529e+01, final cost 1.8329e+01, first-order optimality 1.05e-06.
+---14-3-3 + Partner---
+Model parameters were determined using all available data points.
+Best parameter estimates are:
+    Kd : 4.051e-06.
+The root mean squared error with this fit is 1.56e+00
+----------------------

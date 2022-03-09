@@ -1,0 +1,17 @@
+
+NOTE: In some conditions a zero titrate concentration was detected. Zero concentrations will be used to set data limits but will not be fitted.
+
+Solving system...
+`ftol` termination condition is satisfied.
+Function evaluations 9, initial cost 8.6827e+13, final cost 9.0144e+10, first-order optimality 5.31e+05.
+---cTnI---
+Model parameters were determined using all available data points.
+Best parameter estimates are:
+    Scaling : 5.531e+17.
+    KdA : 5.333e-07.
+    KdB : 1.531e-08.
+The root mean squared error with this fit is 1.28e+05
+----------
+
+plot_model created output file.
+parameter_sensitivity created output file.
