@@ -1,1 +1,4 @@
-furo
+# File: docs/requirements.txt
+# Defining the exact version will make sure things don't break
+
+furo==2022.3.4
