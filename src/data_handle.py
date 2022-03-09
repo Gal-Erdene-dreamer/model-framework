@@ -7,7 +7,6 @@ Created on Thu Nov 12 10:38:03 2020
 import glob
 
 import pandas as pd
-import sys
 
 def process_csv(folder):
     """
