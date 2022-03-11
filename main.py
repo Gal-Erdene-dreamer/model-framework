@@ -6,7 +6,7 @@ Run the main program from here
 """
 
 # Name of the model, should be located in the model folder
-model = "your model"
+model = "example_model"
 
 # The name of the folder that contains the input data / config files.
 input_folder = "input/"
@@ -36,13 +36,13 @@ titrate = 'R_tot'
 Define which parameters should be fitted before analysis is performed.
 {'parameter_1': value, 'parameter_2': value}
 """
-fit_parameters = {'KD':1E-3, 'Alpha':35}
+fit_parameters = {'Kd2': 6.6E-5, 'Alpha': 30}
 
 """
 Define the known value for any remaining parameters in the chosen model,
 same format as the fit_parameters.
 """
-known_parameters = {}
+known_parameters = {'Kd1': 4.05E-6}
 
 # Which analyses to perform after fitting any unknown parameters.
 analysis = ['plot_model']

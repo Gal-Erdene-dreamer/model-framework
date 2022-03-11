@@ -4,12 +4,14 @@ Created on Fri Feb 12 11:28:21 2021
 @author: N.H.J. Geertjens
 """
 # The name of the new model
-name = 'example name'
+name = 'example_model'
 
 # The equations to build the model from
 system_description = ("""
-A + B = AB; Kd1
-AB + C = ABC; Kd2
+R + P = PR; Kd1
+PR + S = PRS; Kd2 / Alpha
+R + S = RS; Kd2
+RS + P = PRS; Kd1/ Alpha
 """)
 
 """
@@ -40,7 +42,7 @@ data_function = 'anisotropy'
 """
 In case of default data faction: which component is labeled / tracked / 
 measured in the experiment. For the custom data function see below. """
-labelled = 'C'
+labelled = 'P'
 
 """
 The following line only needs to be changed when using the custom data function.
