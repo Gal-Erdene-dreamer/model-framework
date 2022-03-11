@@ -6,7 +6,7 @@ Model-framework is a framework for chemical equilibrium models that utilizes a g
 ## Installation:
 1) Download the package. E.g. using:  
    `git clone https://github.com/TUe-chemical-biology/model-framework.git`  
-   or by downloading and extracting the zip-file from [zenodo](doi.org/10.5281/zenodo.5531622).
+   or by downloading and extracting the zip-file from [zenodo](https://doi.org/10.5281/zenodo.5531622).
 2) If not yet available, install the dependencies, e.g. using Anaconda Navigator or via the command prompt:  
    `pip install numpy scipy pandas matplotlib sympy openpyxl`
 
