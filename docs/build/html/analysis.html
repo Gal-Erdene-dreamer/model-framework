@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="The framework for models of thermodynamic equilibrium systems" href="index.html" />
 
-    <meta name="generator" content="sphinx-4.0.1, furo 2022.03.04"/>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
         <title>Analysis methods overview - The model framework analysis documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
@@ -447,7 +447,7 @@ samples.</p>
 <h2>Parameter sensitivity analysis<a class="headerlink" href="#parameter-sensitivity-analysis" title="Permalink to this headline">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.post_process.parameter_sensitivity">
-<span class="sig-prename descclassname"><span class="pre">src.post_process.</span></span><span class="sig-name descname"><span class="pre">parameter_sensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">system</span></em>, <em class="sig-param"><span class="pre">*</span></em>, <em class="sig-param"><span class="pre">sensitivity_perturbation=0.5</span></em>, <em class="sig-param"><span class="pre">sensitivity_state='current'</span></em>, <em class="sig-param"><span class="pre">sensitivity_parameters=None</span></em>, <em class="sig-param"><span class="pre">sensitivity_m_function=&lt;function</span> <span class="pre">_squared_error_m_function&gt;</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.post_process.parameter_sensitivity" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">src.post_process.</span></span><span class="sig-name descname"><span class="pre">parameter_sensitivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensitivity_perturbation=0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensitivity_state='current'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensitivity_parameters=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensitivity_m_function=&lt;function</span> <span class="pre">_squared_error_m_function&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.post_process.parameter_sensitivity" title="Permalink to this definition">#</a></dt>
 <dd><p>Performs local parameter sensitivity analysis on the system.</p>
 <p>The parameters that are tested should be system constants. This means that
 the parameter has the same value across all associated conditions.</p>

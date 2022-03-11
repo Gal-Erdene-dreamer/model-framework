@@ -68,7 +68,7 @@ def write_to_file(func):
         return result
     return wrapper_to_file
 
-def save_plot(fig, name, /, *, write_output = True, **kwargs):
+def save_plot(fig, name, *, write_output = True, **kwargs):
     """
     Common function that most plot-producing functions use in order to save
     the generated fig as a svg file.
