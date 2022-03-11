@@ -1,5 +1,5 @@
 sphinx:
-  fail_on_warning: true
+  fail_on_warning: True
   configuration: docs/source/conf.py
 
 python:
