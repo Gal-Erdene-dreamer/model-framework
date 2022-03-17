@@ -7,20 +7,11 @@ Model-framework is a framework for chemical equilibrium models that utilizes a g
 1) Download the package. E.g. using:  
    `git clone https://github.com/TUe-chemical-biology/model-framework.git`  
    or by downloading and extracting the zip-file from [zenodo](https://doi.org/10.5281/zenodo.5531622).
-2) If not yet available, install the dependencies, e.g. using Anaconda Navigator or via the command prompt:  
+2) Make sure you have python version > 3.8 and, if not yet available, install the dependencies, e.g. using Anaconda Navigator or via the command prompt:  
    `pip install numpy scipy pandas matplotlib sympy openpyxl`
 
 ## Usage:
 Elaborate instructions on how to generate your own models is provided in the Supplementary Material, section Procedure, of the [publication](https://doi.org/10.1101/2021.11.18.469126). Below is a short description how to quickly run the example case which uses the default values in the different scripts after downloading. The example corresponds to the second case described in the publication.
-
-The following versions are required:  
-- Python, version 3.8 or above. 
-- NumPy, version 1.20.1 or above, provides array processing and is a fundamental package for scientific work with Python.
-- SciPy, version 1.6.2 or above, is a scientific computing package which provides the solvers to determine equilibrium conditions.
-- Pandas, version 1.2.4 or above, is a high-performance data structure and data analysis tool.
-- Matplotlib, version 3.3.4, provides MATLAB-style high-quality figures in Python.
-- SymPy, version 1.8, is required in order to construct models using the 'model_builder' tool. 
-- Openpyxl, version 3.0.9, a required dependency for pandas to read excel input files.
 
 ## Running the example model:
 1) Go to the folder 'model-framework' that was created during installation.
