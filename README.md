@@ -24,7 +24,7 @@ Elaborate instructions on how to generate your own models is provided in the Sup
    For the example system, the experimental data and the 'config.ini' file, defining the experimental conditions, are already placed in the folder 'input'.
 4) Finally, open the file 'main.py' in your favourite Python IDE and run it, or run it from the command prompt:  
    `python main.py`
-5) Inspect the console for the determined parameters estimates and the generated images in order to verify the fit accuracy. For this system, the determined values should be Kd2: 3.894E-4 and Alpha: 1.335E3. Note that the final decimal can vary between runs. 
+5) Inspect the console for the determined parameters estimates and the generated images in order to verify the fit accuracy. For this system, the determined values should be Kd2: 3.894E-4 and Alpha: 1.335E3. Note that small variations in the final decimal position are possible between runs. 
 6) Congratulations! You have analysed your first model using the model framework!
 
 ## What's next?
