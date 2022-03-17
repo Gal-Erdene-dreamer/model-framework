@@ -14,7 +14,8 @@ from sympy import Symbol, Pow, sympify, degree
 from src.localization.creator_strings import strings
 
 
-def build_model_file(name, equations, labeled, data_mode, custom_input):
+def build_model_file(name, equations, labeled, data_mode, custom_input,
+                     output_folder = 'output'):
     """
     Creates a custom model file for use with the model framework.
     
@@ -51,6 +52,8 @@ def build_model_file(name, equations, labeled, data_mode, custom_input):
     Custom_input: String
         When the 'custom' data_mode is chosen, this string will be evaluated
         in order to define the custom data function.
+    Output_folder : String, Optional
+        The folder to write the generated model to. The default is 'output'.
         
     Post
     ----
@@ -77,8 +80,8 @@ def build_model_file(name, equations, labeled, data_mode, custom_input):
     data_function_text = _data_function_text(
         data_mode, species, labeled, custom_input, recipes)
     
-    os.makedirs('output/', exist_ok=True)
-    with open(f'output/{name}.py', 'x', encoding="utf-8") as f:
+    os.makedirs(output_folder, exist_ok=True)
+    with open(f'{output_folder}/{name}.py', 'x', encoding="utf-8") as f:
         f.write(header_text)
         f.write(strings['imports'])
         f.write(variable_text)
@@ -86,7 +89,7 @@ def build_model_file(name, equations, labeled, data_mode, custom_input):
         f.write(update_state_text)
         f.write(data_function_text)
         
-    print("Finished building file.")
+    print(f"Finished building file, saved at: {output_folder}/{name}.py.")
     
 
 def text_to_massbalance(text):

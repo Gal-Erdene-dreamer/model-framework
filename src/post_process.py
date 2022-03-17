@@ -48,19 +48,23 @@ def write_to_file(func):
     
     Post
     ----
-    func return written to 'output/*time* *function_name*.csv'
+    func return written to '*output_folder*/*time*_*function_name*.csv'
     
     """
     @wraps(func)
-    def wrapper_to_file(*args, write_output = True, **kwargs):
+    def wrapper_to_file(*args, write_output = True, output_folder = 'output',
+                        **kwargs):
         kwargs['write_output'] = write_output
+        kwargs['output_folder'] = output_folder
         result = func(*args, **kwargs)
         if write_output == True:
             try:
-                time = datetime.now().strftime("%Y-%m-%d %H%M%S")
-                os.makedirs('output/', exist_ok=True)
-                result.to_csv(f'output/{time} {func.__name__}.csv', sep=';')
-                print(f'{func.__name__} created output file.')
+                time = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+                os.makedirs(output_folder, exist_ok=True)
+                result.to_csv(f'{output_folder}/{time}_{func.__name__}.csv', 
+                              sep=';')
+                print(f'{func.__name__} created output file: ' +
+                      f'{output_folder}/{time}_{func.__name__}.csv')
             except AttributeError:
                 raise NotImplementedError(
                     '@write_to_file decorator can only be used on functions '
@@ -68,15 +72,17 @@ def write_to_file(func):
         return result
     return wrapper_to_file
 
-def save_plot(fig, name, *, write_output = True, **kwargs):
+def save_plot(fig, name, *, write_output = True, output_folder= 'output',
+              **kwargs):
     """
     Common function that most plot-producing functions use in order to save
     the generated fig as a svg file.
     """
     if write_output:
-        os.makedirs('output/', exist_ok=True)
-        time = datetime.now().strftime("%Y-%m-%d %H%M%S")
-        fig.savefig(f'output\{time} {name}.svg', format='svg', dpi=1200)
+        os.makedirs(output_folder, exist_ok=True)
+        time = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        fig.savefig(f'{output_folder}/{time}_{name}.svg', format='svg', 
+                    dpi=1200)
             
 
 def plot_data(system, *, plot = None, normalise = False, **kwargs):
